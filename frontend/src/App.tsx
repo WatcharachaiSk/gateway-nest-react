@@ -17,7 +17,7 @@ function App() {
     localStorage.getItem('username')
   );
   const [sendMessage, setSendMessage] = useState('');
-  console.log('getMessage is ', getMessage);
+  // console.log('getMessage is ', getMessage);
 
   useEffect(() => {
     const socket = io('http://localhost:3000'); // Replace with your socket server URL
