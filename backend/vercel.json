@@ -15,7 +15,7 @@
   ],
   "env": {
     "CI": "1",
-    "NPM_FLAGS": "--legacy-peer-deps"
+    "NPM_FLAGS": "--force"
   }
-  
+
 }
