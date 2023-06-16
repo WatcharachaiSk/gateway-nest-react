@@ -2,8 +2,11 @@ import { OnModuleInit, UseInterceptors } from "@nestjs/common";
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server } from "socket.io";
 @WebSocketGateway({
+  // cors: {
+  //   origin: ['http://127.0.0.1:5173', "http://localhost:5173"]
+  // },
   cors: {
-    origin: ['http://127.0.0.1:5173', "http://localhost:5173"]
+    origin: '*',
   },
 })
 export class MyGateways implements OnModuleInit {
