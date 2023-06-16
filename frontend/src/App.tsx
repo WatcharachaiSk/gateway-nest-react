@@ -117,34 +117,8 @@ function App() {
                 placeholder='Jane Doe'
               />
             </Col>
-            {/* <Col xs='auto'>
-              <Form.Label htmlFor='inlineFormInputGroup' visuallyHidden>
-                Message
-              </Form.Label>
-              <InputGroup className='mb-2'>
-                <InputGroup.Text>@</InputGroup.Text>
-                <Form.Control
-                  value={sendMessage}
-                  onChange={(event: any) => {
-                    setSendMessage(event.target.value);
-                  }}
-                  id='inlineFormInputGroup'
-                  placeholder='Message'
-                />
-              </InputGroup>
-            </Col> */}
-            <Col xs='auto'>
-              {/* <Button
-                onClick={(event: any) => {
-                  event.preventDefault();
-                  onSubmit();
-                }}
-                type='submit'
-                className='mb-2'
-              >
-                Send Message
-              </Button> */}
-            </Col>
+
+            <Col xs='auto'></Col>
           </Row>
         </Form>
       </div>
