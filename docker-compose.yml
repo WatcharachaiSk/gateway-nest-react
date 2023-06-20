@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  redis_gate:
+    container_name: redis_gate
+    image: 'redis:alpine'
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+    command: redis-server --appendonly yes --requirepass test1234
+    networks:
+      - default
