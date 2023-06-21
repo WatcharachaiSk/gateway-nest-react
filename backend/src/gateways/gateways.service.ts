@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt";
-import { AddParticipant, CreateGateFields, JoinGateFields, RejoinGateFields } from 'src/types/types';
+import { AddParticipantFields, CreateGateFields, GateRedis, JoinGateFields, RejoinGateFields, RemoveParticipantFields } from 'src/types/types';
 import { createGateID, createUserID } from './ids';
 import { RedisService } from 'src/redis/redis.service';
 
@@ -14,16 +14,17 @@ export class GatewaysService {
     const gateID = createGateID();
     const userID = createUserID();
 
-    const value = {
+    const createGate = {
       id: gateID,
       topic: fields.topic,
       votesPerVoter: fields.votesPerVoter,
       participants: {
         // [`${userID}`]: `${fields.name}`,
       },
+      messages: {},
       adminID: userID
     };
-    await this.redisService.set(gateID, value);
+    await this.redisService.set(gateID, createGate);
     // 
     const getGate = await this.redisService.get(gateID);
 
@@ -70,7 +71,7 @@ export class GatewaysService {
     return getGateUpdate
   }
 
-  async addParticipant(fields: AddParticipant) {
+  async addParticipant(fields: AddParticipantFields) {
     const getGate: any = await this.redisService.get(fields.gateID);
 
     let participants: any = getGate.participants
@@ -82,6 +83,17 @@ export class GatewaysService {
     const setGate = { ...getGate, participants }
     await this.redisService.set(getGate.id, setGate);
     const getGateUpdate = await this.redisService.get(fields.gateID);
+
+    return getGateUpdate
+  }
+
+  async removeParticipant(fields: RemoveParticipantFields) {
+    const getGate: GateRedis | any = await this.redisService.get(fields.gateID);
+    let participantKey = fields.userID;
+    delete getGate.participants[participantKey];
+
+    await this.redisService.set(getGate.id, getGate);
+    const getGateUpdate: GateRedis | any = await this.redisService.get(fields.gateID);
 
     return getGateUpdate
   }

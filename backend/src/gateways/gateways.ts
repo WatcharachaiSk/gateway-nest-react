@@ -23,29 +23,22 @@ export class MyGateways implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server
 
-  @WebSocketServer()
-  io: Namespace
-
-
   async handleConnection(client: SocketWithAuth) {
-    const sockets = this.io.sockets;
+    const sockets = this.server.sockets;
     console.log("client is ", client.handshake.headers.authorization);
     const user = await this.websocketAuthJwtGuard.verify(
       client.handshake.headers.authorization,
       true
     );
     if (!user) {
-      this.server.emit('hello', {
-        msg: 'You Disconnected !',
-      })
       client.disconnect();
       return;
     }
 
-
     const roomName = user.gateID;
     await client.join(roomName);
-    const connectedClients = this.io.adapter.rooms?.get(roomName)?.size ?? 0;
+
+    const connectedClients = sockets.adapter.rooms?.get(roomName)?.size ?? 0;
     console.log(`userID: ${user.userID} joined room with name: ${roomName}`,);
     console.log(`Total clients connected to room '${roomName}': ${connectedClients}`);
 
@@ -58,7 +51,8 @@ export class MyGateways implements OnGatewayConnection, OnGatewayDisconnect {
       }
     )
 
-    this.io.to(user.gateID).emit('hello', { msg: `Hello from ${user.name}`, updateGate });
+    this.server.to(user.gateID).emit('hello', { msg: `Hello from ${user.name}`, updateGate });
+    this.server.to(user.gateID).emit('connectedClients', { msg: `Clients Is : ${connectedClients}` });
 
   }
   // @UseGuards(WebsocketAuthJwtGuard)
@@ -67,8 +61,25 @@ export class MyGateways implements OnGatewayConnection, OnGatewayDisconnect {
   //   this.websocketAuthJwtGuard = new WebsocketAuthJwtGuard();
   // }
 
-  handleDisconnect(client: any) {
-    const sockets = this.io.sockets
+  async handleDisconnect(client: SocketWithAuth) {
+    const sockets = this.server.sockets
+
+    const user = await this.websocketAuthJwtGuard.verify(
+      client.handshake.headers.authorization,
+      true
+    );
+    const roomName = user.gateID;
+    const updateGate = await this.gatewaysService.removeParticipant(
+      {
+        gateID: user.gateID,
+        userID: user.sub
+      }
+    )
+    const connectedClients = sockets.adapter.rooms?.get(roomName)?.size ?? 0;
+
+    this.server.to(roomName).emit('hello', { msg: `User Disconnected from ${user.name}`, updateGate });
+    this.server.to(roomName).emit('connectedClients', { msg: `Clients Is : ${connectedClients}` });
+
   }
 
   @UseGuards(WebsocketAuthJwtGuard)
@@ -86,7 +97,7 @@ export class MyGateways implements OnGatewayConnection, OnGatewayDisconnect {
 
     // const updatedPoll = await this.pollsService.startPoll(user.gateID);
 
-    this.io.to(user.gateID).emit('Message', {
+    this.server.to(user.gateID).emit('Message', {
       msg: body
     });
   }

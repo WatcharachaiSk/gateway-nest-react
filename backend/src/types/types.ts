@@ -17,10 +17,24 @@ export class RejoinGateFields {
   name: string
 }
 
-export class AddParticipant {
+export class AddParticipantFields {
   gateID: string
   userID: string
   name: string
+}
+
+export class RemoveParticipantFields {
+  gateID: string
+  userID: string
+}
+
+export class GateRedis {
+  id: string
+  topic: string
+  votesPerVoter: number
+  participants: object
+  message: object
+  adminID: string
 }
 
 // guard types
@@ -29,5 +43,7 @@ export type AuthPayload = {
   gateID: string;
   name: string;
 };
+
+
 
 export type SocketWithAuth = Socket & AuthPayload;
