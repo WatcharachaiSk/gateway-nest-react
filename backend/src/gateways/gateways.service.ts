@@ -17,7 +17,6 @@ export class GatewaysService {
     const createGate = {
       id: gateID,
       topic: fields.topic,
-      votesPerVoter: fields.votesPerVoter,
       participants: {
         // [`${userID}`]: `${fields.name}`,
       },
@@ -54,6 +53,7 @@ export class GatewaysService {
 
       return {
         ...fields,
+        topic: getGate.topic,
         accessToken
       }
     } else {

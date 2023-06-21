@@ -2,7 +2,6 @@ import { Socket } from 'socket.io';
 
 export class CreateGateFields {
   topic: string;
-  votesPerVoter: number;
   name: string;
 
 }

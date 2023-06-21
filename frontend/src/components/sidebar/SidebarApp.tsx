@@ -61,11 +61,4 @@ function SidebarApp() {
 
 export default SidebarApp;
 
-/*
-icon={<HomeOutlinedIcon />}
-icon={<PeopleOutlinedIcon />}
-icon={<ContactsOutlinedIcon />}
-icon={<ReceiptOutlinedIcon />}
-icon={<HelpOutlineOutlinedIcon />}
-icon={<CalendarTodayOutlinedIcon />}
-*/
+
