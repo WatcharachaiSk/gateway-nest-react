@@ -1,5 +1,5 @@
 import { Button, Form } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createGateWays } from '../../store/features/gateways/gateways';
 import { RootState } from '../../store/store';
@@ -25,7 +25,7 @@ function CreateGate() {
       };
       const res = await axios(configAxios('post', API.createGate, data));
       dispatch(createGateWays(res.data));
-      localStorage.setItem('accessToken', res.data.accessToken);
+      localStorage.setItem('accessTokenCreate', res.data.accessToken);
     } catch (error) {
       console.log(error);
     }

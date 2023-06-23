@@ -23,7 +23,7 @@ function JoinGate() {
       };
       const res = await axios(configAxios('post', API.joinGate, data));
       dispatch(joinGateWays(res.data));
-      localStorage.setItem('accessToken', res.data.accessToken);
+      localStorage.setItem('accessTokenJoin', res.data.accessToken);
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +66,7 @@ function JoinGate() {
             variant='primary'
             type='submit'
           >
-            สร้างห้องแชท
+            เข้าร่วมห้องแชท
           </Button>
         </div>
       </Form>

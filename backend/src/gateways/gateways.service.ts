@@ -73,6 +73,9 @@ export class GatewaysService {
 
   async addParticipant(fields: AddParticipantFields) {
     const getGate: any = await this.redisService.get(fields.gateID);
+    if (!getGate) {
+      return null;
+    }
 
     let participants: any = getGate.participants
 
@@ -89,6 +92,10 @@ export class GatewaysService {
 
   async removeParticipant(fields: RemoveParticipantFields) {
     const getGate: GateRedis | any = await this.redisService.get(fields.gateID);
+    if (!getGate) {
+      return null;
+    }
+    
     let participantKey = fields.userID;
     delete getGate.participants[participantKey];
 

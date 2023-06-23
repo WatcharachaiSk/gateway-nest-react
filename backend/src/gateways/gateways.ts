@@ -25,13 +25,27 @@ export class MyGateways implements OnGatewayConnection, OnGatewayDisconnect {
 
   async handleConnection(client: SocketWithAuth) {
     const sockets = this.server.sockets;
-    console.log("client is ", client.handshake.headers.authorization);
+    console.log("client is ", client.handshake);
     const user = await this.websocketAuthJwtGuard.verify(
-      client.handshake.headers.authorization,
+      client.handshake.headers.authorization || client.handshake.auth.headers.authorization,
       true
     );
     if (!user) {
+      console.log("User Disconnected ", user);
       client.disconnect();
+      return;
+    }
+
+    const updateGate = await this.gatewaysService.addParticipant(
+      {
+        gateID: user.gateID,
+        name: user.name,
+        userID: user.sub
+      }
+    )
+    if (!updateGate) {
+      client.disconnect();
+      console.log("User Disconnected ", user.name, " Can't find a room number ", user.gateID);
       return;
     }
 
@@ -43,16 +57,9 @@ export class MyGateways implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Total clients connected to room '${roomName}': ${connectedClients}`);
 
 
-    const updateGate = await this.gatewaysService.addParticipant(
-      {
-        gateID: user.gateID,
-        name: user.name,
-        userID: user.sub
-      }
-    )
 
     this.server.to(user.gateID).emit('hello', { msg: `Hello from ${user.name}`, updateGate });
-    this.server.to(user.gateID).emit('connectedClients', { msg: `Clients Is : ${connectedClients}` });
+    this.server.to(user.gateID).emit('connectedClients', { clients: connectedClients });
 
   }
   // @UseGuards(WebsocketAuthJwtGuard)
@@ -68,17 +75,20 @@ export class MyGateways implements OnGatewayConnection, OnGatewayDisconnect {
       client.handshake.headers.authorization,
       true
     );
-    const roomName = user.gateID;
-    const updateGate = await this.gatewaysService.removeParticipant(
-      {
-        gateID: user.gateID,
-        userID: user.sub
-      }
-    )
-    const connectedClients = sockets.adapter.rooms?.get(roomName)?.size ?? 0;
+    if (user) {
+      const roomName = user.gateID;
+      const updateGate = await this.gatewaysService.removeParticipant(
+        {
+          gateID: user.gateID,
+          userID: user.sub
+        }
+      )
+      const connectedClients = sockets.adapter.rooms?.get(roomName)?.size ?? 0;
 
-    this.server.to(roomName).emit('hello', { msg: `User Disconnected from ${user.name}`, updateGate });
-    this.server.to(roomName).emit('connectedClients', { msg: `Clients Is : ${connectedClients}` });
+      this.server.to(roomName).emit('hello', { msg: `User Disconnected from ${user.name}`, updateGate });
+      this.server.to(roomName).emit('connectedClients', { msg: `Clients Is : ${connectedClients}` });
+
+    }
 
   }
 
@@ -95,9 +105,9 @@ export class MyGateways implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Attempting to start voting for Gate: ${user.gateID}`);
     // 
 
-    // const updatedPoll = await this.pollsService.startPoll(user.gateID);
+    // const updatedgate = await this.gatesService.startgate(user.gateID);
 
-    this.server.to(user.gateID).emit('Message', {
+    this.server.to(user.gateID).emit('messages', {
       msg: body
     });
   }
