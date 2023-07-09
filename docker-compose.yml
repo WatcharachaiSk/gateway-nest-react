@@ -1,13 +1,29 @@
-version: '3.8'
+version: "3.8"
 
 services:
   redis_gate:
     container_name: redis_gate
-    image: 'redis:alpine'
+    image: "redis:alpine"
     ports:
       - 6379:6379
     expose:
       - 6379
     command: redis-server --appendonly yes --requirepass test1234
+    networks:
+      - default
+
+  pg_gate:
+    image: postgres:14.3
+    container_name: pg_gate
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=gate
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=pg-gate-ways
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg-scripts/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+      - ./pg:/data/db
     networks:
       - default

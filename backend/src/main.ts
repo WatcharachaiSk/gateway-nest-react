@@ -25,7 +25,7 @@ async function bootstrap() {
 
   // const distPath = path.join(__dirname, '../build');
 
-  // // Serve static files from the distPath directory
+  // Serve static files from the distPath directory
   // app.useStaticAssets(distPath);
 
 
