@@ -1,21 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity } from 'src/entity/pg/users.entity';
+import { PassengerEntity } from 'src/entity/pg/passenger.entity';
 
 @Injectable()
-export class PassengeService {
-  @InjectRepository(UsersEntity)
-  private usersRepository: Repository<UsersEntity>;
+export class PassengerService {
+  @InjectRepository(PassengerEntity)
+  private usersRepository: Repository<PassengerEntity>;
 
-  async createPassenge(data: any) {
+  async createPassenger(data: any) {
     const user = await this.usersRepository.findOne({
       where: { username: data.username },
     });
     if (user) {
       throw new BadRequestException('username is exist');
     }
-    const newUser = new UsersEntity();
+    const newUser = new PassengerEntity();
     newUser.username = data.username;
     newUser.password = await newUser.hashPassword(data.password, 10);
     newUser.firstName = data.firstName;

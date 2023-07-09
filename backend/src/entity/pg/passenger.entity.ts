@@ -10,9 +10,9 @@ import {
   import * as bcrypt from 'bcrypt';
 import { OrdersEntity } from './orders.entity';
   
-  @Entity('users')
+  @Entity('passenger')
   @Unique(['id'])
-  export class UsersEntity {
+  export class PassengerEntity {
     @PrimaryColumn('uuid')
     id: string;
   

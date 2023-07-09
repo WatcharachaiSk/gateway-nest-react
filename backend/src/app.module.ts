@@ -4,9 +4,9 @@ import { AppService } from './app.service';
 import { GatewaysModule } from './gateways/gateways.module';
 import { RedisModule } from './redis/redis.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PassengeModule } from './passenge/passenge.module';
 import { DriverModule } from './driver/driver.module';
 import { AuthModule } from './auth/auth.module';
+import { PassengerModule } from './passenger/passenger.module';
 const {
   DATABASE_HOST,
   DATABASE_PORT,
@@ -27,7 +27,7 @@ const {
     }),
     GatewaysModule,
     RedisModule,
-    PassengeModule,
+    PassengerModule,
     DriverModule,
     AuthModule,
   ],

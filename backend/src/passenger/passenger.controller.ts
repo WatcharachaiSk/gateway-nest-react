@@ -1,15 +1,15 @@
 import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
-import { PassengeService } from './passenge.service';
+import { PassengerService } from './passenger.service';
 import { DataResponse } from 'src/dto/Response.dto';
 
 
-@Controller('passenge')
-export class PassengeController {
-  constructor(private readonly passengeService: PassengeService) { }
+@Controller('passenger')
+export class PassengerController {
+  constructor(private readonly passengerService: PassengerService) { }
 
     @Post('/create')
     async createPassenge(@Body() body: any) {
-      const res = await this.passengeService.createPassenge(body);
+      const res = await this.passengerService.createPassenger(body);
       const response = new DataResponse()
       if (response) {
         response.code = HttpStatus.CREATED;

@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { v4 } from 'uuid';
-import { UsersEntity } from './users.entity';
+import { PassengerEntity } from './passenger.entity';
 import { DriversEntity } from './drivers.entity';
 
 @Entity('orders')
@@ -44,9 +44,9 @@ export class OrdersEntity {
   @Column({ name: 'oder_success_other', default: false })
   oderSuccessOther?: string;
 
-  @ManyToOne(() => UsersEntity, { onDelete: 'CASCADE' })
+  @ManyToOne(() => PassengerEntity, { onDelete: 'CASCADE' })
   @JoinColumn()
-  user: UsersEntity;
+  passenger: PassengerEntity;
 
   @ManyToOne(() => DriversEntity, { onDelete: 'CASCADE' })
   @JoinColumn()
