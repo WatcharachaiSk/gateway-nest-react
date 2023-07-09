@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { SocketIOAdapter } from './socket-io-adapter';
 
 import { config } from 'dotenv';
-config(); // loads environment variables from .env file
+// config(); // loads environment variables from .env file
 const { PORT ,CLIENT_PORT}: any = process.env;
 
 async function bootstrap() {
@@ -18,9 +18,6 @@ async function bootstrap() {
     cors: true,
     logger: ['log', 'debug', 'error', 'warn'],
   });
-  // const configService = app.get(ConfigService);
-
-
   app.useWebSocketAdapter(new SocketIOAdapter(app, CLIENT_PORT));
 
   // const distPath = path.join(__dirname, '../build');

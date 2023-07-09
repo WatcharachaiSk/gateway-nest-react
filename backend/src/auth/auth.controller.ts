@@ -6,9 +6,20 @@ import { DataResponse } from 'src/dto/Response.dto';
 export class AuthController {
   constructor(private authService: AuthService) { }
 
-  @Post('/create/passenge')
+  @Post('/create/passenger')
     async createPassenge(@Body() body: any) {
       const res = await this.authService.createPassenge(body);
+      const response = new DataResponse()
+      if (response) {
+        response.code = HttpStatus.CREATED;
+        response.data = res
+        response.message = 'success';
+      }
+      return response;
+    }
+    @Post('/create/driver')
+    async createDriver(@Body() body: any) {
+      const res = await this.authService.createDriver(body);
       const response = new DataResponse()
       if (response) {
         response.code = HttpStatus.CREATED;

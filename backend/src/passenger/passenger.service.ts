@@ -30,4 +30,8 @@ export class PassengerService {
       throw e;
     }
   }
+
+  async getPassengers() {
+    return await this.usersRepository.find();
+  }
 }

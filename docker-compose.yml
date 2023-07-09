@@ -22,8 +22,5 @@ services:
       - POSTGRES_DB=pg-gate-ways
     ports:
       - "5432:5432"
-    volumes:
-      - ./pg-scripts/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
-      - ./pg:/data/db
     networks:
       - default

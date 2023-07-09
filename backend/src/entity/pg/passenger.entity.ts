@@ -9,8 +9,9 @@ import {
   import { v4 } from 'uuid';
   import * as bcrypt from 'bcrypt';
 import { OrdersEntity } from './orders.entity';
+
   
-  @Entity('passenger')
+  @Entity('passengers')
   @Unique(['id'])
   export class PassengerEntity {
     @PrimaryColumn('uuid')
@@ -18,7 +19,7 @@ import { OrdersEntity } from './orders.entity';
   
     @Column()
     username: string;
-  
+
     @Column()
     password: string;
 
@@ -43,7 +44,6 @@ import { OrdersEntity } from './orders.entity';
       this.id = v4();
     }
     
-  
     @Column({ default: new Date().toISOString() })
     createdAt: string;
   
